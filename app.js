@@ -1,5 +1,5 @@
 /**
- * app.js — wires the UI to TriageEngine. No framework, no build step.
+ * app.js - wires the UI to TriageEngine. No framework, no build step.
  */
 
 const MOCK_REQUESTS = [

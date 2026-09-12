@@ -1,5 +1,5 @@
 /**
- * Triage Engine — deterministic, explainable NLP heuristics for request triage.
+ * Triage Engine - deterministic, explainable NLP heuristics for request triage.
  *
  * Why rule-based instead of calling a paid LLM by default?
  * - Zero cost, zero API key, works fully offline in the browser (GitHub Pages friendly).
@@ -8,7 +8,7 @@
  *   which matters for a triage tool that humans need to trust and debug.
  *
  * app.js optionally layers an LLM call on top of this (see enhanceWithAI) purely to
- * polish the *wording* of the summary/response — never to change the underlying decision.
+ * polish the *wording* of the summary/response - never to change the underlying decision.
  */
 
 const CATEGORY_KEYWORDS = {
@@ -255,7 +255,7 @@ function draftResponse({ category, priority, owner, details }) {
       case "Support":
         body =
           priority === "Low" ?
-            "Thanks for the suggestion — we've logged it with our Client Success team for consideration in a future update."
+            "Thanks for the suggestion - we've logged it with our Client Success team for consideration in a future update."
           : "Thanks for reaching out. Our Client Success team has logged your request and will follow up shortly with next steps.";
         break;
       default:
