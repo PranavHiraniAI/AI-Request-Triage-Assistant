@@ -13,58 +13,123 @@
 
 const CATEGORY_KEYWORDS = {
   Billing: [
-    'invoice', 'charge', 'charged', 'overcharge', 'overcharged', 'billing',
-    'payment', 'refund', 'duplicate charge', 'paid twice', 'subscription fee',
-    'credit card', 'receipt', 'pricing error'
+    "invoice",
+    "charge",
+    "charged",
+    "overcharge",
+    "overcharged",
+    "billing",
+    "payment",
+    "refund",
+    "duplicate charge",
+    "paid twice",
+    "subscription fee",
+    "credit card",
+    "receipt",
+    "pricing error",
   ],
   Sales: [
-    'pricing', 'quote', 'demo', 'interested in', 'purchase', 'buy', 'buying',
-    'custom solution', 'custom ai', 'timeline', 'cost estimate', 'upgrade our plan',
-    'new client', 'prospective', 'how much would', 'typical timeline'
+    "pricing",
+    "quote",
+    "demo",
+    "interested in",
+    "purchase",
+    "buy",
+    "buying",
+    "custom solution",
+    "custom ai",
+    "timeline",
+    "cost estimate",
+    "upgrade our plan",
+    "new client",
+    "prospective",
+    "how much would",
+    "typical timeline",
   ],
   Technical: [
-    'bug', 'error', 'crash', 'down', 'outage', 'unavailable', 'not working',
-    'broken', 'integration', 'api', 'login issue', 'access denied', 'portal',
-    'cannot access', "can't access", 'system', 'malfunction', 'glitch'
+    "bug",
+    "error",
+    "crash",
+    "down",
+    "outage",
+    "unavailable",
+    "not working",
+    "broken",
+    "integration",
+    "api",
+    "login issue",
+    "access denied",
+    "portal",
+    "cannot access",
+    "can't access",
+    "system",
+    "malfunction",
+    "glitch",
   ],
   Support: [
-    'help', 'question', 'how do i', 'feature request', 'account', 'assistance',
-    'automate', 'automation', 'show us how', 'training', 'dark mode', 'dashboard',
-    'idea', 'suggestion', 'onboard'
-  ]
+    "help",
+    "question",
+    "how do i",
+    "feature request",
+    "account",
+    "assistance",
+    "automate",
+    "automation",
+    "show us how",
+    "training",
+    "dark mode",
+    "dashboard",
+    "idea",
+    "suggestion",
+    "onboard",
+  ],
 };
 
 // Security / data-incident language forces Technical + Urgent regardless of other signals.
 const SECURITY_PATTERN = new RegExp(
-  '(accidentally (uploaded|shared|sent|exposed))|' +
-  '(wrong (workspace|folder|person|place))|' +
-  '(data (breach|leak|exposure))|' +
-  '(unauthorized access)|' +
-  '(remove(d)? access)|' +
-  '(customer (contact|data|information).{0,40}(wrong|expos|leak))',
-  'i'
+  "(accidentally (uploaded|shared|sent|exposed))|" +
+    "(wrong (workspace|folder|person|place))|" +
+    "(data (breach|leak|exposure))|" +
+    "(unauthorized access)|" +
+    "(remove(d)? access)|" +
+    "(customer (contact|data|information).{0,40}(wrong|expos|leak))",
+  "i",
 );
 
 const URGENT_PHRASES = [
-  'immediately', 'immediate', 'as soon as possible', 'asap', 'urgent',
-  'critical', 'right away', 'emergency'
+  "immediately",
+  "immediate",
+  "as soon as possible",
+  "asap",
+  "urgent",
+  "critical",
+  "right away",
+  "emergency",
 ];
 
 const OUTAGE_PHRASES = [
-  'down', 'outage', 'unavailable', 'cannot access', "can't access", 'not working'
+  "down",
+  "outage",
+  "unavailable",
+  "cannot access",
+  "can't access",
+  "not working",
 ];
 
-const NEAR_DEADLINE_PATTERN = /\b(before|by|due)\b.{0,40}\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|end of day|eod)\b/i;
-const FUTURE_MEETING_PATTERN = /\b(next week|no deadline|whenever|future update|collecting ideas)\b/i;
+const NEAR_DEADLINE_PATTERN =
+  /\b(before|by|due)\b.{0,40}\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|end of day|eod)\b/i;
+const FUTURE_MEETING_PATTERN =
+  /\b(next week|no deadline|whenever|future update|collecting ideas)\b/i;
 const INVOICE_PATTERN = /\b([A-Z]{1,4}-\d{2,6})\b/;
-const DEADLINE_DAY_PATTERN = /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|end of day|eod)\b/i;
+const DEADLINE_DAY_PATTERN =
+  /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|end of day|eod)\b/i;
 
 const OWNER_BY_CATEGORY = {
-  Sales: 'Sales Team',
-  Billing: 'Finance',
-  Technical: 'Engineering',
-  Support: 'Client Success',
-  Other: 'Client Success'
+  Sales: "Sales Team",
+  Billing: "Finance",
+  Technical: "Engineering",
+  Support: "Client Success",
+  Other: "Client Success",
 };
 
 function countMatches(text, phrases) {
@@ -77,9 +142,9 @@ function countMatches(text, phrases) {
 }
 
 function classifyCategory(text) {
-  let best = { category: 'Other', score: 0, matched: [] };
+  let best = { category: "Other", score: 0, matched: [] };
   // Priority order used only to break ties consistently.
-  const order = ['Technical', 'Billing', 'Sales', 'Support'];
+  const order = ["Technical", "Billing", "Sales", "Support"];
   for (const category of order) {
     const matched = countMatches(text, CATEGORY_KEYWORDS[category]);
     if (matched.length > best.score) {
@@ -99,7 +164,7 @@ function extractDetails(text) {
     isNearDeadline: NEAR_DEADLINE_PATTERN.test(text),
     isFutureRequest: FUTURE_MEETING_PATTERN.test(text),
     hasOutageLanguage: countMatches(text, OUTAGE_PHRASES).length > 0,
-    hasUrgentLanguage: countMatches(text, URGENT_PHRASES).length > 0
+    hasUrgentLanguage: countMatches(text, URGENT_PHRASES).length > 0,
   };
 }
 
@@ -109,7 +174,7 @@ function scorePriority(details) {
 
   if (details.isSecurityIncident) {
     score += 4;
-    reasons.push('data/security incident language detected');
+    reasons.push("data/security incident language detected");
   }
   if (details.hasUrgentLanguage) {
     score += 3;
@@ -117,78 +182,85 @@ function scorePriority(details) {
   }
   if (details.hasOutageLanguage) {
     score += 2;
-    reasons.push('service outage / inaccessibility affecting operations');
+    reasons.push("service outage / inaccessibility affecting operations");
   }
   if (details.isNearDeadline) {
     score += 2;
-    reasons.push('near-term deadline mentioned');
+    reasons.push("near-term deadline mentioned");
   }
   if (details.isFutureRequest) {
     score -= 1;
-    reasons.push('no deadline / future-looking request');
+    reasons.push("no deadline / future-looking request");
   }
 
   let level;
-  if (score >= 6) level = 'Urgent';
-  else if (score >= 3) level = 'High';
-  else if (score >= 1) level = 'Medium';
-  else level = 'Low';
+  if (score >= 6) level = "Urgent";
+  else if (score >= 3) level = "High";
+  else if (score >= 1) level = "Medium";
+  else level = "Low";
 
-  const reason = reasons.length
-    ? reasons.join('; ')
-    : 'no urgency indicators found; treated as routine';
+  const reason =
+    reasons.length ?
+      reasons.join("; ")
+    : "no urgency indicators found; treated as routine";
 
   return { level, reason };
 }
 
 function routeOwner(category, isSecurityIncident) {
-  if (isSecurityIncident) return 'Engineering';
-  return OWNER_BY_CATEGORY[category] || 'Client Success';
+  if (isSecurityIncident) return "Engineering";
+  return OWNER_BY_CATEGORY[category] || "Client Success";
 }
 
 function summarize(text) {
-  const clean = text.trim().replace(/\s+/g, ' ');
+  const clean = text.trim().replace(/\s+/g, " ");
   const sentences = clean.split(/(?<=[.!?])\s+/);
   let summary = sentences[0];
   if (summary.length < 60 && sentences[1]) {
-    summary += ' ' + sentences[1];
+    summary += " " + sentences[1];
   }
   if (summary.length > 180) {
-    summary = summary.slice(0, 177).trim() + '...';
+    summary = summary.slice(0, 177).trim() + "...";
   }
   return summary;
 }
 
 function draftResponse({ category, priority, owner, details }) {
-  const greeting = 'Hi there,\n\nThank you for reaching out.';
+  const greeting = "Hi there,\n\nThank you for reaching out.";
   const closing = `\n\nBest regards,\n${owner}`;
   let body;
 
   if (details.isSecurityIncident) {
-    body = 'We understand this involves potentially exposed customer information and are treating it as our top priority. ' +
-      'Our Engineering team is restricting access now and will confirm remediation shortly.';
+    body =
+      "We understand this involves potentially exposed customer information and are treating it as our top priority. " +
+      "Our Engineering team is restricting access now and will confirm remediation shortly.";
   } else {
     switch (category) {
-      case 'Billing':
-        body = details.invoiceRef
-          ? `We're looking into ${details.invoiceRef} right away${details.deadline ? ` and will resolve it before ${details.deadline}` : ''}. Our Finance team will follow up with a corrected summary.`
+      case "Billing":
+        body =
+          details.invoiceRef ?
+            `We're looking into ${details.invoiceRef} right away${details.deadline ? ` and will resolve it before ${details.deadline}` : ""}. Our Finance team will follow up with a corrected summary.`
           : "We're reviewing the billing concern you raised and our Finance team will follow up with details shortly.";
         break;
-      case 'Technical':
-        body = details.hasOutageLanguage
-          ? "We're sorry for the disruption. Our Engineering team has been notified and is actively investigating the outage. We'll share an update as soon as service is restored."
+      case "Technical":
+        body =
+          details.hasOutageLanguage ?
+            "We're sorry for the disruption. Our Engineering team has been notified and is actively investigating the outage. We'll share an update as soon as service is restored."
           : "Thanks for flagging this. Our Engineering team will look into the issue and follow up with next steps.";
         break;
-      case 'Sales':
-        body = "Thanks for your interest! Our Sales team would love to learn more about your needs and discuss pricing and timelines. We'll reach out shortly to find a time that works for you.";
+      case "Sales":
+        body =
+          "Thanks for your interest! Our Sales team would love to learn more about your needs and discuss pricing and timelines. We'll reach out shortly to find a time that works for you.";
         break;
-      case 'Support':
-        body = priority === 'Low'
-          ? "Thanks for the suggestion — we've logged it with our Client Success team for consideration in a future update."
+      case "Support":
+        body =
+          priority === "Low" ?
+            "Thanks for the suggestion — we've logged it with our Client Success team for consideration in a future update."
           : "Thanks for reaching out. Our Client Success team has logged your request and will follow up shortly with next steps.";
         break;
       default:
-        body = "Thank you for your message. We've routed this to the right team and will follow up shortly.";
+        body =
+          "Thank you for your message. We've routed this to the right team and will follow up shortly.";
     }
   }
 
@@ -197,16 +269,22 @@ function draftResponse({ category, priority, owner, details }) {
 
 function triage(text) {
   if (!text || !text.trim()) {
-    throw new Error('Request text is required.');
+    throw new Error("Request text is required.");
   }
 
   const details = extractDetails(text);
   const catResult = classifyCategory(text);
-  const category = details.isSecurityIncident ? 'Technical' : catResult.category;
+  const category =
+    details.isSecurityIncident ? "Technical" : catResult.category;
   const priorityResult = scorePriority(details);
   const owner = routeOwner(category, details.isSecurityIncident);
   const summary = summarize(text);
-  const response = draftResponse({ category, priority: priorityResult.level, owner, details });
+  const response = draftResponse({
+    category,
+    priority: priorityResult.level,
+    owner,
+    details,
+  });
 
   return {
     summary,
@@ -216,9 +294,17 @@ function triage(text) {
     priorityReason: priorityResult.reason,
     owner,
     response,
-    details
+    details,
   };
 }
 
 // Exposed as a plain global for use from app.js without a build step.
-window.TriageEngine = { triage, classifyCategory, scorePriority, routeOwner, summarize, draftResponse, extractDetails };
+window.TriageEngine = {
+  triage,
+  classifyCategory,
+  scorePriority,
+  routeOwner,
+  summarize,
+  draftResponse,
+  extractDetails,
+};
