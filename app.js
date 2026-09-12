@@ -31,12 +31,12 @@ function populateExamples() {
   });
 
   // Bind the beautiful premium quick template pills
-  const chips = document.querySelectorAll('.chip-btn');
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const idx = Number(chip.getAttribute('data-index'));
+  const chips = document.querySelectorAll(".chip-btn");
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const idx = Number(chip.getAttribute("data-index"));
       const text = MOCK_REQUESTS[idx];
-      document.getElementById('requestInput').value = text;
+      document.getElementById("requestInput").value = text;
       // Sync dropdown select just in case
       select.value = String(idx);
       updateCharCount(text.length);
@@ -94,7 +94,8 @@ function renderResult(result) {
   }
 
   document.getElementById("summaryText").textContent = result.summary;
-  document.getElementById("priorityReasonText").textContent = result.priorityReason;
+  document.getElementById("priorityReasonText").textContent =
+    result.priorityReason;
   document.getElementById("responseText").value = result.response;
 }
 
@@ -200,7 +201,7 @@ function setupApiKeyControls() {
 function init() {
   populateExamples();
   setupApiKeyControls();
-  
+
   const textarea = document.getElementById("requestInput");
   if (textarea) {
     textarea.addEventListener("input", () => {
@@ -211,7 +212,7 @@ function init() {
   document
     .getElementById("analyzeBtn")
     .addEventListener("click", handleAnalyze);
-    
+
   document.getElementById("copyResponseBtn").addEventListener("click", () => {
     const responseText = document.getElementById("responseText");
     responseText.select();

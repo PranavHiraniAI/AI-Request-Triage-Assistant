@@ -1,242 +1,543 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Triage AI — Request Triage Assistant</title>
-  <!-- Modern clean typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <!-- Ambient background glow layers -->
-  <div class="ambient-glow glow-1"></div>
-  <div class="ambient-glow glow-2"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Triage AI — Request Triage Assistant</title>
+    <!-- Modern clean typography -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="styles.css"
+    />
+  </head>
+  <body>
+    <!-- Ambient background glow layers -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
 
-  <header class="app-header">
-    <div class="header-container">
-      <div class="brand">
-        <div class="brand-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
-        <div class="brand-info">
-          <h1>Triage AI</h1>
-          <span class="version-tag">v1.1.0</span>
-        </div>
-      </div>
-      
-      <div class="status-indicator">
-        <span class="status-pulse"></span>
-        <span class="status-text">Fully Operational</span>
-      </div>
-
-      <div class="header-links">
-        <a href="https://github.com" target="_blank" class="github-link" title="GitHub Repository">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 3.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-          </svg>
-          <span>Repository</span>
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <main class="app-main">
-    <div class="dashboard-grid">
-      
-      <!-- Input Panel (Left Column) -->
-      <div class="dashboard-col left-col">
-        <section class="input-panel main-card">
-          <div class="card-header">
-            <div class="card-title-group">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-              </svg>
-              <h2>Unstructured Request</h2>
-            </div>
-            <p class="panel-desc">Paste core client messages from email, chat, or support forms.</p>
+    <header class="app-header">
+      <div class="header-container">
+        <div class="brand">
+          <div class="brand-logo">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+              />
+            </svg>
           </div>
-
-          <div class="input-container">
-            <label for="requestInput" class="sr-only">Client request text</label>
-            <textarea id="requestInput" rows="8" placeholder="Enter unstructured client request..."></textarea>
-            <div class="textarea-footer">
-              <span id="charCount">0 characters</span>
-            </div>
+          <div class="brand-info">
+            <h1>Triage AI</h1>
+            <span class="version-tag">v1.1.0</span>
           </div>
+        </div>
 
-          <div class="triage-controls">
-            <div class="selector-wrapper">
-              <span class="select-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <div class="status-indicator">
+          <span class="status-pulse"></span>
+          <span class="status-text">Fully Operational</span>
+        </div>
+
+        <div class="header-links">
+          <a
+            href="https://github.com"
+            target="_blank"
+            class="github-link"
+            title="GitHub Repository"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 3.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+              ></path>
+            </svg>
+            <span>Repository</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="dashboard-grid">
+        <!-- Input Panel (Left Column) -->
+        <div class="dashboard-col left-col">
+          <section class="input-panel main-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+                  />
                 </svg>
-              </span>
-              <select id="exampleSelect" class="custom-select">
-                <option value="">Load a mock request…</option>
-              </select>
-            </div>
-            
-            <button id="analyzeBtn" type="button" class="btn-primary">
-              <span>Analyze Request</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-arrow">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Quick Interactive Chips for mock requests -->
-          <div class="quick-templates">
-            <span class="templates-label">Quick templates:</span>
-            <div class="chips-container">
-              <button class="chip-btn" data-index="0" type="button" title="Request 01: Process Automation">#01 Automation</button>
-              <button class="chip-btn" data-index="1" type="button" title="Request 02: Portal Outage">#02 Outage</button>
-              <button class="chip-btn" data-index="2" type="button" title="Request 03: Double Invoice">#03 Billing</button>
-              <button class="chip-btn" data-index="3" type="button" title="Request 04: Font / Dark Mode">#04 Feature</button>
-              <button class="chip-btn" data-index="4" type="button" title="Request 05: Data Incident">#05 Security</button>
-              <button class="chip-btn" data-index="5" type="button" title="Request 06: AI Reporting System">#06 Inquiry</button>
-            </div>
-          </div>
-
-          <!-- Advanced AI Wording Polish Details (Collapsible) -->
-          <details class="ai-settings">
-            <summary class="settings-summary">
-              <span>Wording polish with OpenAI Key (Optional)</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="details-chevron">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </summary>
-            <div class="settings-content">
-              <p class="hint">
-                Our core classification model runs locally, deterministically, and for free. Provide an OpenAI key to enable a stylistic AI overlay that polishes the draft reply text while respecting core categories.
+                <h2>Unstructured Request</h2>
+              </div>
+              <p class="panel-desc">
+                Paste core client messages from email, chat, or support forms.
               </p>
-              <div class="key-input-row">
-                <input id="apiKeyInput" type="password" placeholder="sk-..." class="key-field" />
-                <div class="key-buttons">
-                  <button id="saveKeyBtn" type="button" class="btn-secondary">Save Key</button>
-                  <button id="clearKeyBtn" type="button" class="btn-danger">Clear</button>
-                </div>
-              </div>
-              <div id="keyStatus" class="key-status"></div>
             </div>
-          </details>
-        </section>
-      </div>
 
-      <!-- Results Panel (Right Column) -->
-      <div class="dashboard-col right-col">
-        
-        <!-- Empty State Card (Visible when results empty) -->
-        <div id="resultsPlaceholder" class="placeholder-card main-card">
-          <div class="placeholder-content">
-            <div class="placeholder-icon-outer">
-              <div class="placeholder-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="22" y1="12" x2="18" y2="12"></line>
-                  <line x1="6" y1="12" x2="2" y2="12"></line>
-                  <line x1="12" y1="6" x2="12" y2="2"></line>
-                  <line x1="12" y1="22" x2="12" y2="18"></line>
-                </svg>
+            <div class="input-container">
+              <label
+                for="requestInput"
+                class="sr-only"
+                >Client request text</label
+              >
+              <textarea
+                id="requestInput"
+                rows="8"
+                placeholder="Enter unstructured client request..."
+              ></textarea>
+              <div class="textarea-footer">
+                <span id="charCount">0 characters</span>
               </div>
             </div>
-            <h3>Waiting for Triage Analysis</h3>
-            <p>Select a quick template on the left or type your custom unstructured business request, then click "Analyze Request".</p>
-          </div>
+
+            <div class="triage-controls">
+              <div class="selector-wrapper">
+                <span class="select-icon">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path
+                      d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                    />
+                  </svg>
+                </span>
+                <select
+                  id="exampleSelect"
+                  class="custom-select"
+                >
+                  <option value="">Load a mock request…</option>
+                </select>
+              </div>
+
+              <button
+                id="analyzeBtn"
+                type="button"
+                class="btn-primary"
+              >
+                <span>Analyze Request</span>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="btn-arrow"
+                >
+                  <line
+                    x1="5"
+                    y1="12"
+                    x2="19"
+                    y2="12"
+                  ></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Quick Interactive Chips for mock requests -->
+            <div class="quick-templates">
+              <span class="templates-label">Quick templates:</span>
+              <div class="chips-container">
+                <button
+                  class="chip-btn"
+                  data-index="0"
+                  type="button"
+                  title="Request 01: Process Automation"
+                >
+                  #01 Automation
+                </button>
+                <button
+                  class="chip-btn"
+                  data-index="1"
+                  type="button"
+                  title="Request 02: Portal Outage"
+                >
+                  #02 Outage
+                </button>
+                <button
+                  class="chip-btn"
+                  data-index="2"
+                  type="button"
+                  title="Request 03: Double Invoice"
+                >
+                  #03 Billing
+                </button>
+                <button
+                  class="chip-btn"
+                  data-index="3"
+                  type="button"
+                  title="Request 04: Font / Dark Mode"
+                >
+                  #04 Feature
+                </button>
+                <button
+                  class="chip-btn"
+                  data-index="4"
+                  type="button"
+                  title="Request 05: Data Incident"
+                >
+                  #05 Security
+                </button>
+                <button
+                  class="chip-btn"
+                  data-index="5"
+                  type="button"
+                  title="Request 06: AI Reporting System"
+                >
+                  #06 Inquiry
+                </button>
+              </div>
+            </div>
+
+            <!-- Advanced AI Wording Polish Details (Collapsible) -->
+            <details class="ai-settings">
+              <summary class="settings-summary">
+                <span>Wording polish with OpenAI Key (Optional)</span>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="details-chevron"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="settings-content">
+                <p class="hint">
+                  Our core classification model runs locally, deterministically,
+                  and for free. Provide an OpenAI key to enable a stylistic AI
+                  overlay that polishes the draft reply text while respecting
+                  core categories.
+                </p>
+                <div class="key-input-row">
+                  <input
+                    id="apiKeyInput"
+                    type="password"
+                    placeholder="sk-..."
+                    class="key-field"
+                  />
+                  <div class="key-buttons">
+                    <button
+                      id="saveKeyBtn"
+                      type="button"
+                      class="btn-secondary"
+                    >
+                      Save Key
+                    </button>
+                    <button
+                      id="clearKeyBtn"
+                      type="button"
+                      class="btn-danger"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <div
+                  id="keyStatus"
+                  class="key-status"
+                ></div>
+              </div>
+            </details>
+          </section>
         </div>
 
-        <!-- Triage Result Card -->
-        <section id="resultsPanel" class="results-panel main-card" hidden>
-          <div class="card-header border-bottom">
-            <div class="card-title-group">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
-              <h2>Triage Diagnosis</h2>
+        <!-- Results Panel (Right Column) -->
+        <div class="dashboard-col right-col">
+          <!-- Empty State Card (Visible when results empty) -->
+          <div
+            id="resultsPlaceholder"
+            class="placeholder-card main-card"
+          >
+            <div class="placeholder-content">
+              <div class="placeholder-icon-outer">
+                <div class="placeholder-icon">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                    ></circle>
+                    <line
+                      x1="22"
+                      y1="12"
+                      x2="18"
+                      y2="12"
+                    ></line>
+                    <line
+                      x1="6"
+                      y1="12"
+                      x2="2"
+                      y2="12"
+                    ></line>
+                    <line
+                      x1="12"
+                      y1="6"
+                      x2="12"
+                      y2="2"
+                    ></line>
+                    <line
+                      x1="12"
+                      y1="22"
+                      x2="12"
+                      y2="18"
+                    ></line>
+                  </svg>
+                </div>
+              </div>
+              <h3>Waiting for Triage Analysis</h3>
+              <p>
+                Select a quick template on the left or type your custom
+                unstructured business request, then click "Analyze Request".
+              </p>
             </div>
-            <p class="panel-desc">Categorized, graded, and routed automatically.</p>
           </div>
 
-          <!-- Triage Meta Details -->
-          <div class="results-layout">
-            <div class="meta-row">
-              <div class="meta-widget">
-                <span class="widget-label">CATEGORY</span>
-                <span id="categoryValue" class="widget-value">—</span>
-              </div>
-              <div class="meta-widget">
-                <span class="widget-label">PRIORITY</span>
-                <span id="priorityValue" class="widget-value">—</span>
-              </div>
-              <div class="meta-widget">
-                <span class="widget-label">ROUTED OWNER</span>
-                <span id="ownerValue" class="widget-value">—</span>
-              </div>
-            </div>
-
-            <!-- Badges (Hidden display for original JS anchors compatibility) -->
-            <div class="badges" style="display: none;">
-              <span id="categoryBadge"></span>
-              <span id="priorityBadge"></span>
-              <span id="ownerBadge"></span>
-            </div>
-
-            <div class="result-block summary-block">
-              <h3>Summary Extraction</h3>
-              <p id="summaryText" class="data-text"></p>
-            </div>
-
-            <div class="result-block reason-block">
-              <div class="reason-indicator">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="info-alert-icon">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="16" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          <!-- Triage Result Card -->
+          <section
+            id="resultsPanel"
+            class="results-panel main-card"
+            hidden
+          >
+            <div class="card-header border-bottom">
+              <div class="card-title-group">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                 </svg>
-                <div class="reason-content-wrapper">
-                  <h4>Priority Decision Reason</h4>
-                  <p id="priorityReasonText" class="reason-text"></p>
+                <h2>Triage Diagnosis</h2>
+              </div>
+              <p class="panel-desc">
+                Categorized, graded, and routed automatically.
+              </p>
+            </div>
+
+            <!-- Triage Meta Details -->
+            <div class="results-layout">
+              <div class="meta-row">
+                <div class="meta-widget">
+                  <span class="widget-label">CATEGORY</span>
+                  <span
+                    id="categoryValue"
+                    class="widget-value"
+                    >—</span
+                  >
+                </div>
+                <div class="meta-widget">
+                  <span class="widget-label">PRIORITY</span>
+                  <span
+                    id="priorityValue"
+                    class="widget-value"
+                    >—</span
+                  >
+                </div>
+                <div class="meta-widget">
+                  <span class="widget-label">ROUTED OWNER</span>
+                  <span
+                    id="ownerValue"
+                    class="widget-value"
+                    >—</span
+                  >
+                </div>
+              </div>
+
+              <!-- Badges (Hidden display for original JS anchors compatibility) -->
+              <div
+                class="badges"
+                style="display: none"
+              >
+                <span id="categoryBadge"></span>
+                <span id="priorityBadge"></span>
+                <span id="ownerBadge"></span>
+              </div>
+
+              <div class="result-block summary-block">
+                <h3>Summary Extraction</h3>
+                <p
+                  id="summaryText"
+                  class="data-text"
+                ></p>
+              </div>
+
+              <div class="result-block reason-block">
+                <div class="reason-indicator">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="info-alert-icon"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                    ></circle>
+                    <line
+                      x1="12"
+                      y1="16"
+                      x2="12"
+                      y2="12"
+                    ></line>
+                    <line
+                      x1="12"
+                      y1="8"
+                      x2="12.01"
+                      y2="8"
+                    ></line>
+                  </svg>
+                  <div class="reason-content-wrapper">
+                    <h4>Priority Decision Reason</h4>
+                    <p
+                      id="priorityReasonText"
+                      class="reason-text"
+                    ></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-block draft-block">
+                <div class="draft-header">
+                  <h3>Draft Professional Reply</h3>
+                  <span class="draft-actions">
+                    <button
+                      id="copyResponseBtn"
+                      type="button"
+                      class="btn-copy"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="copy-icon"
+                      >
+                        <rect
+                          x="9"
+                          y="9"
+                          width="13"
+                          height="13"
+                          rx="2"
+                          ry="2"
+                        ></rect>
+                        <path
+                          d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                        ></path>
+                      </svg>
+                      <span id="copyBtnText">Copy reply</span>
+                    </button>
+                  </span>
+                </div>
+                <div class="textarea-wrapper">
+                  <textarea
+                    id="responseText"
+                    rows="8"
+                    placeholder="Draft first response..."
+                  ></textarea>
+                  <div class="draft-footer-hint">
+                    Ready to review. You can customize this draft inline before
+                    copying.
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div class="result-block draft-block">
-              <div class="draft-header">
-                <h3>Draft Professional Reply</h3>
-                <span class="draft-actions">
-                  <button id="copyResponseBtn" type="button" class="btn-copy">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                    <span id="copyBtnText">Copy reply</span>
-                  </button>
-                </span>
-              </div>
-              <div class="textarea-wrapper">
-                <textarea id="responseText" rows="8" placeholder="Draft first response..."></textarea>
-                <div class="draft-footer-hint">Ready to review. You can customize this draft inline before copying.</div>
-              </div>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
+    </main>
 
-    </div>
-  </main>
+    <footer class="app-footer">
+      <p>Node Solutions AI Technical Challenge • Stage Two Triage Assistant</p>
+      <p class="copyright">
+        Built using deterministic NLP heuristics and optional LLM wording
+        refinement.
+      </p>
+    </footer>
 
-  <footer class="app-footer">
-    <p>Node Solutions AI Technical Challenge • Stage Two Triage Assistant</p>
-    <p class="copyright">Built using deterministic NLP heuristics and optional LLM wording refinement.</p>
-  </footer>
-
-  <script src="triageEngine.js"></script>
-  <script src="app.js"></script>
-</body>
+    <script src="triageEngine.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
