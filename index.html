@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Request Triage Assistant</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>AI Request Triage Assistant</h1>
+    <p class="subtitle">Turn an unstructured client request into a clear, actionable next step.</p>
+  </header>
+
+  <main class="app-main">
+    <section class="input-panel">
+      <label for="requestInput">Client request</label>
+      <textarea id="requestInput" rows="7" placeholder="Paste or type a client request here..."></textarea>
+
+      <div class="input-row">
+        <select id="exampleSelect">
+          <option value="">Load a mock request…</option>
+        </select>
+        <button id="analyzeBtn" type="button">Analyze Request</button>
+      </div>
+
+      <details class="ai-settings">
+        <summary>Optional: enhance wording with your own OpenAI key</summary>
+        <p class="hint">
+          The core classification (category, priority, routing) always runs locally and is free.
+          If you provide your own OpenAI API key, it is used only to polish the summary and
+          draft response wording, via a direct call from your browser to OpenAI. The key is
+          stored only in this browser's local storage and is never sent anywhere else or committed
+          to this repository.
+        </p>
+        <input id="apiKeyInput" type="password" placeholder="sk-... (optional)" />
+        <button id="saveKeyBtn" type="button">Save key locally</button>
+        <button id="clearKeyBtn" type="button">Clear saved key</button>
+        <span id="keyStatus" class="key-status"></span>
+      </details>
+    </section>
+
+    <section id="resultsPanel" class="results-panel" hidden>
+      <h2>Triage Result</h2>
+
+      <div class="badges">
+        <span class="badge" id="categoryBadge"></span>
+        <span class="badge" id="priorityBadge"></span>
+        <span class="badge owner" id="ownerBadge"></span>
+      </div>
+
+      <div class="result-block">
+        <h3>Summary</h3>
+        <p id="summaryText"></p>
+      </div>
+
+      <div class="result-block">
+        <h3>Priority reason</h3>
+        <p id="priorityReasonText"></p>
+      </div>
+
+      <div class="result-block">
+        <h3>Draft first response</h3>
+        <textarea id="responseText" rows="8"></textarea>
+        <button id="copyResponseBtn" type="button">Copy response</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Built for the Node Solutions AI Technical Challenge — deterministic rule-based triage engine, optional LLM wording enhancement.</p>
+  </footer>
+
+  <script src="triageEngine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
