@@ -11,6 +11,8 @@ const MOCK_REQUESTS = [
   'I saw your company online and am interested in a custom AI reporting system. What would pricing and a typical timeline look like?'
 ];
 
+const API_KEY_STORAGE_KEY = 'triage_openai_key';
+
 function populateExamples() {
   const select = document.getElementById('exampleSelect');
   MOCK_REQUESTS.forEach((text, i) => {
@@ -43,18 +45,101 @@ function renderResult(result) {
   document.getElementById('responseText').value = result.response;
 }
 
-function handleAnalyze() {
-  const text = document.getElementById('requestInput').value;
+function getSavedApiKey() {
   try {
-    const result = window.TriageEngine.triage(text);
+    return localStorage.getItem(API_KEY_STORAGE_KEY) || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+// Purely stylistic pass: never allowed to change category/priority/owner, only wording.
+async function enhanceWithAI(result, originalText) {
+  const apiKey = getSavedApiKey();
+  if (!apiKey) return result;
+
+  try {
+    const prompt = 'You are polishing wording only. Do not change facts, category, priority, or owner.\n' +
+      'Original client request: "' + originalText + '"\n' +
+      'Current summary: "' + result.summary + '"\n' +
+      'Current draft response: "' + result.response + '"\n\n' +
+      'Return JSON with keys "summary" and "response" containing more natural, professional wording.';
+
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      })
+    });
+
+    if (!res.ok) throw new Error(`OpenAI request failed: ${res.status}`);
+    const data = await res.json();
+    const parsed = JSON.parse(data.choices[0].message.content);
+    return {
+      ...result,
+      summary: parsed.summary || result.summary,
+      response: parsed.response || result.response
+    };
+  } catch (err) {
+    console.warn('AI enhancement skipped:', err.message);
+    return result;
+  }
+}
+
+async function handleAnalyze() {
+  const text = document.getElementById('requestInput').value;
+  const btn = document.getElementById('analyzeBtn');
+  try {
+    btn.disabled = true;
+    btn.textContent = 'Analyzing...';
+    let result = window.TriageEngine.triage(text);
+    result = await enhanceWithAI(result, text);
     renderResult(result);
   } catch (err) {
     alert(err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Analyze Request';
   }
+}
+
+function setupApiKeyControls() {
+  const input = document.getElementById('apiKeyInput');
+  const status = document.getElementById('keyStatus');
+  const existing = getSavedApiKey();
+  if (existing) status.textContent = 'Key saved in this browser.';
+
+  document.getElementById('saveKeyBtn').addEventListener('click', () => {
+    const value = input.value.trim();
+    if (!value) return;
+    try {
+      localStorage.setItem(API_KEY_STORAGE_KEY, value);
+      status.textContent = 'Key saved in this browser.';
+      input.value = '';
+    } catch (e) {
+      status.textContent = 'Could not save key (storage unavailable).';
+    }
+  });
+
+  document.getElementById('clearKeyBtn').addEventListener('click', () => {
+    try {
+      localStorage.removeItem(API_KEY_STORAGE_KEY);
+      status.textContent = 'Key cleared.';
+    } catch (e) {
+      // ignore
+    }
+  });
 }
 
 function init() {
   populateExamples();
+  setupApiKeyControls();
   document.getElementById('analyzeBtn').addEventListener('click', handleAnalyze);
   document.getElementById('copyResponseBtn').addEventListener('click', () => {
     const textarea = document.getElementById('responseText');
