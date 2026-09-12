@@ -1,0 +1,8 @@
+.DS_Store
+Thumbs.db
+node_modules/
+*.log
+.env
+
+# Challenge source document kept local only (avoid publishing assessment materials publicly)
+Node_Solutions_AI_Technical_Challenge.pdf
